@@ -1,0 +1,11 @@
+h1.h3.mb-3.fw-normal Please sign in
+= simple_form_for(resource, as: resource_name, url: session_path(resource_name), html: {class: "ulsa-login-form", autocomplete: "off"}) do |f|
+  .form-group.mb-4
+    .form-floating
+      = f.input :email, input_html: { autocomplete: 'off', class: 'form-control', id: 'floatingInput' }, label: false, wrapper: false
+      label for="floatingInput" Email address
+    .form-floating
+      = f.input :password, input_html: { autocomplete: 'off', class: 'form-control', id: 'floatingPassword' }, label: false, wrapper: false
+      label for="floatingPassword" Password
+
+    = f.button :button, "Log in", class: "w-100 btn btn-lg btn-primary", data: {class_name: 'ulsa-login-form', button_name: "Log in"}

@@ -1,0 +1,200 @@
+// Place all the styles related to the static controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: https://sass-lang.com/
+
+/* Custom dashboard styles */
+.dashboard-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 960px;
+  margin: 16px auto 0;
+}
+
+.dashboard-wrapper .side-bar-area {
+  width: 180px;
+}
+
+.friends-list .friends-list-header {
+  background: #f6f6f6;
+  color: #ccc;
+  font-size: 12px;
+  border-top: 1px solid #f3f3f3;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 4px;
+  padding: 5px;
+}
+
+.friends-list .friend-name {
+  display: block;
+  font-size: 14px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 3px 8px 2px 8px;
+  text-decoration: none;
+  color: inherit;
+  transition: all .2s linear;
+  cursor: pointer;
+}
+
+.friends-list .friend-name:hover {
+  background: #eee;
+}
+
+.dashboard-wrapper .main-area {
+  width: calc(100% - 104px);
+  border: 1px solid #ccc;
+  min-height: 100%;
+  margin-left: 24px;
+  box-shadow: 0 0 12px;
+}
+
+.main-area .top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: #eee;
+  border-bottom: 1px solid #ddd;
+}
+
+.top-bar .top-bar-title {
+  font-size: 24px;
+  line-height: 38px;
+  color: #333;
+}
+
+.top-bar-actions button:nth-child(1) {
+  margin-right: 8px;
+}
+
+.dashboard-balances .balances-bar {
+  display: flex;
+  justify-content: space-around;
+  padding: 8px 16px;
+  background: #eee;
+  border-bottom: 1px solid #ddd;
+  color: #999;
+}
+
+.balances-bar .balance-block {
+  text-align: center;
+}
+
+.balance-block  p {
+  font-size: 13px;
+  line-height: 16px;
+  margin-bottom: 0;
+}
+
+.dashboard-balances .dashboard-detail {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 24px;
+  padding: 16px;
+}
+
+.dashboard-detail .detail-block:nth-child(1) {
+  border-right: 1px solid #ddd;
+}
+
+.detail-block .detail-title {
+  font-size: 14px;
+  text-transform: uppercase;
+  color: #999;
+}
+
+.detail-block .user-detail {
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  grid-gap: 8px;
+  align-items: center;
+  margin: 8px 0;
+}
+
+.user-detail .user-img {
+  width: 30px;
+  height: 30px;
+}
+
+.user-detail .user-info p {
+  font-size: 16px;
+  margin: 0;
+}
+
+.user-detail .user-info p:nth-child(2) {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.expenses-list .expense-item {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 16px;
+  transition: all .2s  linear;
+}
+
+.expenses-list .expense-item:hover {
+  background: #f8f8f8;
+}
+
+.expense-item:hover .remove-btn {
+  display: block;
+}
+
+.remove-btn {
+  position: absolute;
+  top: 24px;
+  right: 16px;
+  display: none;
+  font-size: 12px;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+}
+
+.expense-item .item-lhs {
+  display: inline-flex;
+  align-items: center;
+}
+
+.item-lhs p:nth-child(1) {
+  font-size: 10px;
+  color: #999;
+  margin: 0;
+}
+
+.item-lhs p:nth-child(2) {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0 0 0 8px;
+}
+
+.expense-item .item-rhs {
+  display: inline-flex;
+  padding-right: 24px;
+}
+
+.item-rhs .you-details {
+  text-align: center;
+}
+
+.item-rhs .you-details:nth-child(2) {
+  margin-left: 24px;
+}
+
+.you-details p:nth-child(1) {
+  font-size: 12px;
+  line-height: 15px;
+  color: #aaa;
+  margin: 0;
+}
+
+.you-details p:nth-child(2) {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0;
+}
+/* Custom dashboard styles ends */

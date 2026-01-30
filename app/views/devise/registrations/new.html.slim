@@ -1,0 +1,16 @@
+h1.h3.mb-3.fw-normal Please sign up
+= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { autocomplete: "off" }) do |f|
+  .form-group.mb-4
+    .form-floating
+      = f.input :email, input_html: { autocomplete: 'off', class: 'form-control', id: 'floatingInput' }, label: false, wrapper: false
+      label for="floatingInput" Email address
+    .form-floating
+      = f.input :password, input_html: { autocomplete: 'off', class: 'form-control', id: 'floatingPassword' }, label: false, wrapper: false
+      label for="floatingPassword" Password
+    .form-floating
+      = f.input :password_confirmation, input_html: { autocomplete: 'off', class: 'form-control', id: 'floatingPasswordConfirm' }, label: false, wrapper: false
+      label for="floatingPasswordConfirm" Password Confirmation
+
+    = f.button :button, "Sign up", class: "w-100 btn btn-lg btn-primary", data: { button_name: "Log in" }
+
+= render "devise/shared/links"

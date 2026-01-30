@@ -1,0 +1,17 @@
+header
+  nav.navbar.navbar-expand-md.navbar-dark.fixed-top.bg-dark
+    .container-fluid
+      a.navbar-brand href="#"  Splitwise
+      button.navbar-toggler aria-controls="navbarCollapse" aria-expanded="false" aria-label=("Toggle navigation") data-bs-target="#navbarCollapse" data-bs-toggle="collapse" type="button" 
+        span.navbar-toggler-icon
+      .d-flex
+        #navbarNavDarkDropdown.collapse.navbar-collapse
+          ul.navbar-nav
+            li.nav-item.dropdown
+              a#navbarDarkDropdownMenuLink.nav-link.dropdown-toggle aria-expanded="false" data-bs-toggle="dropdown" href="#" role="button" 
+                | Account
+              ul.dropdown-menu.dropdown-menu-dark aria-labelledby="navbarDarkDropdownMenuLink" 
+                li
+                  = link_to destroy_user_session_path, method: :delete, class: 'dropdown-item'
+                    .icon-logout.font-size-20.mr-4
+                    | Logout

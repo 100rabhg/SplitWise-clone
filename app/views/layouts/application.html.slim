@@ -1,0 +1,18 @@
+doctype html
+html
+  head
+    title
+      | BE Assignment Junior
+    = render 'layouts/header_layout'
+  - if ['sessions' , 'registrations'].include?(controller_name)
+    body.text-center
+      main.form-signin
+        = yield
+  - else
+    body.d-flex.flex-column.h-100
+      = render 'layouts/top_nav_bar'
+    main.flex-shrink-0
+      .container
+        = yield
+
+= render 'layouts/jgrowl_notifications'
