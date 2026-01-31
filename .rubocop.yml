@@ -1,0 +1,22 @@
+AllCops:
+  NewCops: enable
+  Exclude:
+    - 'bin/**/*'
+    - 'test/**/*'
+    - db/**/*
+    - config/**/*
+    - 'Gemfile'
+    - 'Rakefile'
+    - config.ru
+
+
+Style/Documentation:
+  Enabled: false
+
+# 2 spaces tab
+Layout/IndentationStyle:
+  Enabled: true
+  IndentationWidth: 2
+  EnforcedStyle: spaces
+  SupportedStyles:
+    - spaces

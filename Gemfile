@@ -15,6 +15,7 @@ gem 'slim-rails'
 gem 'turbolinks', '~> 5'
 gem 'webpacker', '~> 5.0'
 gem "acts_as_paranoid"
+gem 'rubocop'
 
 group :development, :test do
   gem 'dotenv-rails'

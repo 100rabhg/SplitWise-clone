@@ -18,16 +18,16 @@ module BeAssignmentJunior1
     #
     config.time_zone = 'Chennai'
     # config.eager_load_paths << Rails.root.join("extras")
-    # 
+
     config.action_mailer.delivery_method = :smtp
     config.action_mailer.smtp_settings = {
-      address: ENV['SMTP_ADDRESS'],
-      port: ENV['SMTP_PORT'],
-      domain: ENV['SMTP_DOMAIN'],
-      user_name: ENV['SMTP_USERNAME'],
-      password: ENV['SMTP_PASSWORD'],
+      address: ENV.fetch('SMTP_ADDRESS'),
+      port: ENV.fetch('SMTP_PORT'),
+      domain: ENV.fetch('SMTP_DOMAIN'),
+      user_name: ENV.fetch('SMTP_USERNAME', nil),
+      password: ENV.fetch('SMTP_PASSWORD', nil),
       authentication: :login,
-      enable_starttls_auto: ENV['SMTP_ENABLE_STARTTLS_AUTO']
+      enable_starttls_auto: ENV.fetch('SMTP_ENABLE_STARTTLS_AUTO', false)
     }
   end
 end
