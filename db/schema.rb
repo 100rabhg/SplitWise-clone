@@ -10,10 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_01_31_051841) do
+ActiveRecord::Schema.define(version: 2026_01_31_063320) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "expense_items", force: :cascade do |t|
+    t.string "type", null: false
+    t.bigint "transaction_id", null: false
+    t.string "name", null: false
+    t.decimal "amount", precision: 10, scale: 2, null: false
+    t.datetime "deleted_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["transaction_id"], name: "index_expense_items_on_transaction_id"
+  end
 
   create_table "friendship_balances", force: :cascade do |t|
     t.bigint "friendship_id", null: false
@@ -39,6 +50,33 @@ ActiveRecord::Schema.define(version: 2026_01_31_051841) do
     t.check_constraint "user_1_id < user_2_id", name: "chk_order"
   end
 
+  create_table "item_splits", force: :cascade do |t|
+    t.bigint "expense_item_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "friendship_id"
+    t.decimal "amount", precision: 10, scale: 2, null: false
+    t.datetime "deleted_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["expense_item_id"], name: "index_item_splits_on_expense_item_id"
+    t.index ["friendship_id"], name: "index_item_splits_on_friendship_id"
+    t.index ["user_id"], name: "index_item_splits_on_user_id"
+  end
+
+  create_table "transactions", force: :cascade do |t|
+    t.string "type", null: false
+    t.bigint "user_id"
+    t.bigint "friendship_id"
+    t.decimal "amount", precision: 10, scale: 2, null: false
+    t.text "notes"
+    t.datetime "deleted_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["friendship_id"], name: "index_transactions_on_friendship_id"
+    t.index ["type"], name: "index_transactions_on_type"
+    t.index ["user_id"], name: "index_transactions_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -54,8 +92,14 @@ ActiveRecord::Schema.define(version: 2026_01_31_051841) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "expense_items", "transactions"
   add_foreign_key "friendship_balances", "friendships"
   add_foreign_key "friendship_balances", "users", column: "owes_to_id"
   add_foreign_key "friendships", "users", column: "user_1_id"
   add_foreign_key "friendships", "users", column: "user_2_id"
+  add_foreign_key "item_splits", "expense_items"
+  add_foreign_key "item_splits", "friendships"
+  add_foreign_key "item_splits", "users"
+  add_foreign_key "transactions", "friendships"
+  add_foreign_key "transactions", "users"
 end
