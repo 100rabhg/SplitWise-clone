@@ -10,10 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_01_31_051745) do
+ActiveRecord::Schema.define(version: 2026_01_31_051841) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "friendship_balances", force: :cascade do |t|
+    t.bigint "friendship_id", null: false
+    t.decimal "balance", precision: 10, scale: 2, default: "0.0", null: false
+    t.bigint "owes_to_id", null: false
+    t.datetime "deleted_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["friendship_id", "owes_to_id"], name: "index_friendship_balances_on_friendship_id_and_owes_to_id", unique: true
+    t.index ["friendship_id"], name: "index_friendship_balances_on_friendship_id"
+    t.index ["owes_to_id"], name: "index_friendship_balances_on_owes_to_id"
+  end
 
   create_table "friendships", force: :cascade do |t|
     t.bigint "user_1_id", null: false
@@ -42,6 +54,8 @@ ActiveRecord::Schema.define(version: 2026_01_31_051745) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "friendship_balances", "friendships"
+  add_foreign_key "friendship_balances", "users", column: "owes_to_id"
   add_foreign_key "friendships", "users", column: "user_1_id"
   add_foreign_key "friendships", "users", column: "user_2_id"
 end
