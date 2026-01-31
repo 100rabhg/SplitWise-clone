@@ -10,10 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_06_083940) do
+ActiveRecord::Schema.define(version: 2026_01_31_051745) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "friendships", force: :cascade do |t|
+    t.bigint "user_1_id", null: false
+    t.bigint "user_2_id", null: false
+    t.datetime "deleted_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_1_id", "user_2_id"], name: "index_friendships_on_user_1_id_and_user_2_id", unique: true
+    t.index ["user_1_id"], name: "index_friendships_on_user_1_id"
+    t.index ["user_2_id"], name: "index_friendships_on_user_2_id"
+    t.check_constraint "user_1_id < user_2_id", name: "chk_order"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -25,8 +37,11 @@ ActiveRecord::Schema.define(version: 2021_10_06_083940) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "name"
     t.string "mobile_number"
+    t.datetime "deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "friendships", "users", column: "user_1_id"
+  add_foreign_key "friendships", "users", column: "user_2_id"
 end
