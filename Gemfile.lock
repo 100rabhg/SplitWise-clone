@@ -89,6 +89,10 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
+    dotenv (3.2.0)
+    dotenv-rails (3.2.0)
+      dotenv (= 3.2.0)
+      railties (>= 6.1)
     erubi (1.10.0)
     fabrication (2.23.1)
     faker (2.19.0)
@@ -243,6 +247,7 @@ DEPENDENCIES
   byebug
   capybara (>= 3.26)
   devise
+  dotenv-rails
   fabrication
   faker
   jbuilder (~> 2.7)

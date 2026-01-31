@@ -8,6 +8,10 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
+  # Validations
+  validates :name, presence: true
+  validates :mobile_number, allow_blank: true, format: { with: /\A[\d\s\-\+\(\)]+\z/, message: 'is invalid' }
+
   has_many :friendships, ->(user) { where('user_1_id = :id OR user_2_id = :id', id: user.id) }
 
   has_many :expense_transactions

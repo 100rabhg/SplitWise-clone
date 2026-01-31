@@ -4,7 +4,7 @@ html
     title
       | BE Assignment Junior
     = render 'layouts/header_layout'
-  - if ['sessions' , 'registrations'].include?(controller_name)
+  - if ['sessions' , 'registrations', 'passwords'].include?(controller_name)
     body.text-center
       main.form-signin
         = yield

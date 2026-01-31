@@ -17,6 +17,7 @@ gem 'webpacker', '~> 5.0'
 gem "acts_as_paranoid"
 
 group :development, :test do
+  gem 'dotenv-rails'
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 end
 
