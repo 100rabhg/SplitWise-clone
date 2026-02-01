@@ -3,7 +3,7 @@
 class ItemSplit < ApplicationRecord
   acts_as_paranoid
 
-  belongs_to :expense_item
+  belongs_to :expense_item, touch: true
   belongs_to :user
   belongs_to :friendship
 

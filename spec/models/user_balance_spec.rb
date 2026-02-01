@@ -20,7 +20,7 @@ RSpec.describe UserBalance, type: :model do
     it { is_expected.to validate_numericality_of(:net_balance) }
 
     it 'validates user_id is unique' do
-      Fabricate(:user_balance, user: user)
+      UserBalance.find_or_create_by!(user: user)
       duplicate_balance = Fabricate.build(:user_balance, user: user)
       expect(duplicate_balance).not_to be_valid
     end

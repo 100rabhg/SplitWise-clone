@@ -7,5 +7,5 @@ class UserBalance < ApplicationRecord
 
   # Validations
   validates :total_due, :total_owed, :net_balance, presence: true, numericality: true
-  validates :user_id, presence: true, uniqueness: true
+  validates :user_id, presence: true, uniqueness: { conditions: -> { where(deleted_at: nil) } }
 end

@@ -45,14 +45,14 @@ module AmountSumValidatable
 
     return if parent_value == expected
 
-    errors.add(parent_attr, "must equal sum of #{assoc}.#{cfg[:child_amount_attr]} (#{expected.to_s('F')})")
+    errors.add(parent_attr, "must equal sum of #{assoc}.#{cfg[:child_amount_attr]} (#{expected})")
   end
 
   def expected_amount_sum(cfg)
     assoc      = cfg[:association]
     child_attr = cfg[:child_amount_attr]
 
-    send(assoc).to_a.sum do |record|
+    send(assoc).to_a.reject(&:marked_for_destruction?).sum do |record|
       val = record.respond_to?(child_attr) ? record.send(child_attr) : 0
       BigDecimal(val.to_s)
     end

@@ -7,7 +7,7 @@ RSpec.describe UserBalanceRecalculationJob, type: :job do
     let(:user) { Fabricate(:user) }
 
     context 'when user exists with balance' do
-      let(:balance) { Fabricate(:user_balance, user: user, total_due: 0, total_owed: 0) }
+      let(:balance) { user.user_balance }
 
       before do
         balance
@@ -43,6 +43,7 @@ RSpec.describe UserBalanceRecalculationJob, type: :job do
         friend = Fabricate(:user)
         friendship = Fabricate(:friendship, user_1_id: user.id, user_2_id: friend.id)
         Fabricate(:friendship_balance, friendship: friendship, balance: 25, owes_to: user)
+        UserBalance.find_by(user_id: user.id)&.destroy
 
         expect do
           UserBalanceRecalculationJob.new.perform(user.id)

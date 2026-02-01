@@ -3,7 +3,7 @@
 class UserBalanceRecalculationJob < ApplicationJob
   queue_as :default
 
-  attr_accessor :user, :balance
+  attr_accessor :user
 
   BALANCE_SUM_SQL = <<~SQL
     SUM(
@@ -26,12 +26,13 @@ class UserBalanceRecalculationJob < ApplicationJob
     self.user = User.find_by(id: user_id)
     return unless user
 
-    self.balance = user.ensure_balance
     recalculate_from_friendships
   end
 
   def recalculate_from_friendships
     balances = calculate_balances
+    balance = user.ensure_balance
+
     balance.total_due = balances[:total_due]
     balance.total_owed = balances[:total_owed]
     balance.net_balance = balances[:net_balance]

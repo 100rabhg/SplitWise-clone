@@ -58,6 +58,8 @@ end
 
 Faker::Config.locale = 'en-IND'
 
+ActiveJob::Base.queue_adapter = :inline
+
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|
     with.test_framework :rspec
