@@ -12,6 +12,9 @@ AllCops:
 
 Style/Documentation:
   Enabled: false
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
 
 # 2 spaces tab
 Layout/IndentationStyle:

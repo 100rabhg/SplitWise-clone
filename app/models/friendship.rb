@@ -10,7 +10,7 @@ class Friendship < ApplicationRecord
   has_many :friendship_balances, dependent: :destroy
   has_many :item_splits, dependent: :destroy
 
-  validates :user_1_id, :user_2_id, presence: true
+  validate :users_are_different
   validates :user_1_id, uniqueness: { scope: :user_2_id }
 
   before_validation :normalize_user_ids
@@ -20,6 +20,10 @@ class Friendship < ApplicationRecord
   end
 
   private
+
+  def users_are_different
+    errors.add(:user_2_id, 'cannot be the same as user_1') if user_1_id == user_2_id
+  end
 
   def normalize_user_ids
     return if user_1_id.blank? || user_2_id.blank?

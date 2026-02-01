@@ -12,16 +12,28 @@ class User < ApplicationRecord
   validates :name, presence: true
   validates :mobile_number, allow_blank: true, format: { with: /\A[\d\s\-\+\(\)]+\z/, message: 'is invalid' }
 
-  has_many :friendships, ->(user) { where('user_1_id = :id OR user_2_id = :id', id: user.id) }
+  # Associations
+  has_one :user_balance, dependent: :destroy
+
+  has_many :friendships, class_name: 'FlatFriendship', foreign_key: :user_id
 
   has_many :expense_transactions
-  has_many :payment_transactions, through: :friendships
-  has_many :friendship_balances, through: :friendships
-  has_many :item_splits, through: :friendships
+  has_many :payment_transactions, -> { where(deleted_at: nil) }, through: :friendships
+  has_many :friendship_balances, -> { where(deleted_at: nil) }, through: :friendships
+  has_many :item_splits, -> { where(deleted_at: nil) }, through: :friendships
+  has_many :friends, through: :friendships, source: :friend
 
-  def friends
-    User.joins(:friendships)
-        .where('friendships.user_1_id = :id OR friendships.user_2_id = :id', id: id)
-        .where.not(id: id)
+  after_create :initialize_user_balance
+
+  # Get or create user balance
+  def ensure_balance
+    user_balance || create_user_balance
+  end
+
+  private
+
+  # Initialize user balance on user creation
+  def initialize_user_balance
+    UserBalanceRecalculationJob.perform_later(id)
   end
 end

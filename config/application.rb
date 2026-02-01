@@ -19,6 +19,8 @@ module BeAssignmentJunior1
     config.time_zone = 'Chennai'
     # config.eager_load_paths << Rails.root.join("extras")
 
+    config.active_record.schema_format = :sql
+
     config.action_mailer.delivery_method = :smtp
     config.action_mailer.smtp_settings = {
       address: ENV.fetch('SMTP_ADDRESS'),
