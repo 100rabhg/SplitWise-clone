@@ -17,6 +17,8 @@ gem 'webpacker', '~> 5.0'
 gem "acts_as_paranoid"
 gem 'rubocop'
 gem 'net-smtp', require: false
+gem 'net-pop',  require: false
+gem 'net-imap', require: false
 
 group :development, :test do
   gem 'dotenv-rails'
