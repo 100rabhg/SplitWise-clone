@@ -1,0 +1,15 @@
+default: &default
+  adapter: postgresql
+  encoding: utf-8
+
+development:
+  <<: *default
+  database: splitwise_development
+
+test:
+  <<: *default
+  database: splitwise_test
+
+production:
+  <<: *default
+  url: <%= ENV["DATABASE_URL"] %>
