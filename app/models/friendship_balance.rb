@@ -10,7 +10,7 @@ class FriendshipBalance < ApplicationRecord
   validates :owes_to_id, presence: true, uniqueness: { scope: :friendship_id }
 
   # Callbacks to trigger user balance recalculation
-  after_commit :trigger_user_balance_recalculation, on: %i[create update]
+  after_commit :trigger_user_balance_recalculation, on: %i[create update destroy]
 
   scope :for_user, lambda { |user_id|
     joins(:friendship)

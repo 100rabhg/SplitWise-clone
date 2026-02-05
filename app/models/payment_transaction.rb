@@ -9,6 +9,6 @@ class PaymentTransaction < Transaction
   private
 
   def trigger_balance_recalculation
-    RecalculateFriendshipBalanceJob.perform_later(friendship_id) if friendship_id.present?
+    RecalculateFriendshipBalanceJob.perform_later(friendship_id)
   end
 end

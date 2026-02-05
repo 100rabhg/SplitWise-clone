@@ -8,7 +8,15 @@ class ExpenseTransaction < Transaction
 
   validates_amount_equals_sum_of :expense_items
 
-  # Capture friendships before data changes
+  scope :involving, lambda { |user|
+    ids = ItemSplit
+          .joins(:expense_item)
+          .where(user_id: user.id)
+          .select('expense_items.transaction_id')
+
+    where(id: ids).or(where(paid_by: user))
+  }
+
   before_update :capture_friendships_before_change
 
   def destroy
@@ -26,25 +34,7 @@ class ExpenseTransaction < Transaction
   end
 
   def trigger_balance_recalculations
-    # CREATE:
-    # Only the "after" state exists, so fetch current friendships
-    #
-    # UPDATE:
-    # Users may be added or removed. Merge friendships from
-    # before + after state to ensure no affected friendship is missed.
-    #
-    # DESTROY:
-    # After destroy, associations are gone, so rely only on
-    # friendships captured before deletion.
-    friendship_ids = if transaction_include_any_action?([:create])
-                       fetch_friendship_ids
-                     elsif transaction_include_any_action?([:destroy])
-                       @friendship_ids_before.to_a
-                     else # update
-                       (@friendship_ids_before.to_a + fetch_friendship_ids).uniq
-                     end
-
-    friendship_ids.each do |friendship_id|
+    friendship_ids_for_callback.each do |friendship_id|
       RecalculateFriendshipBalanceJob.perform_later(friendship_id)
     end
   end
@@ -55,5 +45,15 @@ class ExpenseTransaction < Transaction
       .where(expense_items: { transaction_id: id })
       .distinct
       .pluck(:friendship_id)
+  end
+
+  def friendship_ids_for_callback
+    if transaction_include_any_action?([:create])
+      fetch_friendship_ids
+    elsif transaction_include_any_action?([:destroy])
+      @friendship_ids_before.to_a
+    else
+      (@friendship_ids_before.to_a + fetch_friendship_ids).uniq
+    end
   end
 end

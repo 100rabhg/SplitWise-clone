@@ -8,6 +8,7 @@ AllCops:
     - 'Gemfile'
     - 'Rakefile'
     - config.ru
+    - 'app/channels/**/*'
 
 
 Style/Documentation:

@@ -17,7 +17,6 @@ class User < ApplicationRecord
 
   has_many :friendships, class_name: 'FlatFriendship', foreign_key: :user_id
 
-  has_many :expense_transactions
   has_many :payment_transactions, -> { where(deleted_at: nil) }, through: :friendships
   has_many :friendship_balances, -> { where(deleted_at: nil) }, through: :friendships
   has_many :item_splits, -> { where(deleted_at: nil) }, through: :friendships

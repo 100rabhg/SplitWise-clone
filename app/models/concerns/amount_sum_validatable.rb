@@ -54,7 +54,7 @@ module AmountSumValidatable
 
     send(assoc).to_a.reject(&:marked_for_destruction?).sum do |record|
       val = record.respond_to?(child_attr) ? record.send(child_attr) : 0
-      BigDecimal(val.to_s)
+      BigDecimal(val.to_s.presence || '0')
     end
   end
 end

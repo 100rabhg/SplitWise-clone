@@ -27,8 +27,8 @@ class RecalculateFriendshipBalanceJob < ApplicationJob
   end
 
   def settlement_net
-    # settlements received - settlements paid
-    total_paid_by(friend) - total_paid_by(user)
+    # settlements paid - settlements received
+    total_paid_by(user) - total_paid_by(friend)
   end
 
   def shares_paid_by(payer, consumer)

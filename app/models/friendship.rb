@@ -7,13 +7,15 @@ class Friendship < ApplicationRecord
   belongs_to :user2, class_name: 'User', foreign_key: :user_2_id
 
   has_many :payment_transactions, dependent: :destroy
-  has_many :friendship_balances, dependent: :destroy
+  has_one :friendship_balance, dependent: :destroy
   has_many :item_splits, dependent: :destroy
 
   validate :users_are_different
   validates :user_1_id, uniqueness: { scope: :user_2_id }
 
   before_validation :normalize_user_ids
+
+  after_create :initialize_friendship_balance
 
   def users
     [user1, user2]
@@ -29,5 +31,10 @@ class Friendship < ApplicationRecord
     return if user_1_id.blank? || user_2_id.blank?
 
     self.user_1_id, self.user_2_id = [user_1_id.to_i, user_2_id.to_i].minmax
+  end
+
+  # Initialize friendship_balance on creation
+  def initialize_friendship_balance
+    create_friendship_balance(owes_to_id: user_2_id, balance: 0)
   end
 end

@@ -15,9 +15,9 @@ RSpec.describe UserBalanceRecalculationJob, type: :job do
         friendship = Fabricate(:friendship, user_1_id: user.id, user_2_id: friend.id)
         friendship2 = Fabricate(:friendship, user_1_id: user.id)
         friendship3 = Fabricate(:friendship, user_1_id: user.id)
-        Fabricate(:friendship_balance, friendship: friendship, balance: 25, owes_to: friend)
-        Fabricate(:friendship_balance, friendship: friendship2, balance: 50, owes_to: user)
-        Fabricate(:friendship_balance, friendship: friendship3, balance: 25, owes_to: user)
+        friendship.friendship_balance.update(balance: 25, owes_to: friend)
+        friendship2.friendship_balance.update(balance: 50, owes_to: user)
+        friendship3.friendship_balance.update(balance: 25, owes_to: user)
       end
 
       it 'recalculates user balance' do
@@ -42,7 +42,7 @@ RSpec.describe UserBalanceRecalculationJob, type: :job do
       it 'creates a new balance and calculates' do
         friend = Fabricate(:user)
         friendship = Fabricate(:friendship, user_1_id: user.id, user_2_id: friend.id)
-        Fabricate(:friendship_balance, friendship: friendship, balance: 25, owes_to: user)
+        friendship.friendship_balance.update(balance: 25, owes_to: user)
         UserBalance.find_by(user_id: user.id)&.destroy
 
         expect do
@@ -62,7 +62,7 @@ RSpec.describe UserBalanceRecalculationJob, type: :job do
 
     context 'when user is owed money' do
       before do
-        Fabricate(:friendship_balance, friendship: friendship, balance: 100, owes_to: friend)
+        friendship.friendship_balance.update(balance: 100, owes_to: friend)
       end
 
       it 'calculates total_due correctly via job perform' do
@@ -76,7 +76,7 @@ RSpec.describe UserBalanceRecalculationJob, type: :job do
 
     context 'when user owes money' do
       before do
-        Fabricate(:friendship_balance, friendship: friendship, balance: 50, owes_to: user)
+        friendship.friendship_balance.update(balance: 50, owes_to: user)
       end
 
       it 'calculates total_owed correctly via job perform' do
@@ -93,8 +93,8 @@ RSpec.describe UserBalanceRecalculationJob, type: :job do
       let(:friendship2) { Fabricate(:friendship, user_1_id: user.id, user_2_id: friend2.id) }
 
       before do
-        Fabricate(:friendship_balance, friendship: friendship, balance: 100, owes_to: friend)
-        Fabricate(:friendship_balance, friendship: friendship2, balance: 50, owes_to: user)
+        friendship.friendship_balance.update(balance: 100, owes_to: friend)
+        friendship2.friendship_balance.update(balance: 50, owes_to: user)
       end
 
       it 'calculates net_balance correctly via job perform' do
