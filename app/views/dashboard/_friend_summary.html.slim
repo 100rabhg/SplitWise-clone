@@ -1,0 +1,19 @@
+.card.mb-3
+  .card-body.d-flex.align-items-center.justify-content-between
+    - fb = friendship_balance
+    - owed_to = fb.owes_to
+    - other = (fb.friendship.user_1_id == current_user.id) ? fb.friendship.user2 : fb.friendship.user1
+    .d-flex.align-items-center
+      .me-3
+        img.user-img.rounded-circle alt="profile" src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" width="36" height="36" /
+      .
+        - if owed_to.id == current_user.id
+          strong= "#{other.name} owes you"
+        - else
+          strong= "You owe #{other.name}"
+        .text-muted small Current balance
+    .
+      - if fb.balance.zero?
+        = content_tag(:span, 'settled', class: 'badge text-secondary')
+      - else
+        = content_tag(:span, number_to_currency(fb.balance), class: (owed_to.id == current_user.id ? 'badge badge-success' : 'badge badge-danger'))

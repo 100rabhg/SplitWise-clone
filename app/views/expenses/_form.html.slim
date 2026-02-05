@@ -1,0 +1,79 @@
+- content_for :title, (expense.new_record? ? 'Add Expense' : 'Edit Expense')
+
+.container.mt-4.mb-5#expense-form-page-container
+  .row.justify-content-center
+    .col-lg-10
+      .card.shadow-sm
+        .card-header.bg-white.border-bottom
+          h2.mb-0.h4= expense.new_record? ? 'Add an Expense' : 'Edit Expense'
+          p.text-muted.small.mb-0 Split an expense among friends
+        .card-body.p-4
+          = form_with model: expense, url: url, local: true, id: 'expense-form', remote: true do |f|
+            = render 'shared/form_errors', object: expense
+            #frontend-error-container.d-none
+              .alert.alert-danger.mb-4
+                h6.alert-heading
+                  i.bi.bi-exclamation-octagon-fill.me-2
+                  | Validation Error
+                p.mb-0#frontend-error-message
+
+            / Expense Description
+            .card.mb-4.border
+              .card-body
+                h5.card-title.mb-3 Expense Details
+                .row
+                  .col-md-8.mb-3
+                    = f.label :notes, 'Description', class: 'form-label fw-medium'
+                    .input-group
+                      span.input-group-text
+                        i.bi.bi-receipt
+                      = f.text_field :notes, class: 'form-control', placeholder: 'Dinner, Groceries, Trip...', required: true
+                  .col-md-4.mb-3
+                    = f.label :amount, 'Total Amount', class: 'form-label fw-medium'
+                    .input-group
+                      span.input-group-text ₹
+                      = f.number_field :amount, step: '0.01', class: 'form-control', placeholder: '0.00', required: true, readonly: false, min: 1
+
+            / Participants Section
+            .card.mb-4.border
+              .card-body
+                h5.card-title.mb-3 Participants
+                p.text-muted.small.mb-3 Select users to include in this expense
+                .d-flex.flex-wrap.gap-3
+                  - if users.present?
+                    - existing_participant_ids = expense.expense_items.flat_map(&:item_splits).map(&:user_id).uniq
+                    - users.each do |u|
+                      .form-check
+                        input.form-check-input.participant-toggle type="checkbox" value=u.id id="participant_#{u.id}" checked=(existing_participant_ids.include?(u.id) || (expense.new_record? && existing_participant_ids.empty? && u.id == current_user.id))
+                        label.form-check-label for="participant_#{u.id}"= u.name
+                  - else
+                    p.text-muted No friends found to split with.
+
+            / Items Section
+            .card.mb-4.border
+              .card-body
+                .d-flex.justify-content-between.align-items-center.mb-3
+                  h5.card-title.mb-0 Items
+                  .btn-group
+                    button.btn.btn-sm.btn-outline-primary#add-item type="button"
+                      i.bi.bi-plus-circle.me-1
+                      | Add Item
+                    button.btn.btn-sm.btn-outline-secondary#add-tax type="button"
+                      i.bi.bi-plus-circle.me-1
+                      | Add Tax
+                    button.btn.btn-sm.btn-outline-secondary#add-tip type="button"
+                      i.bi.bi-plus-circle.me-1
+                      | Add Tip
+                
+                #items-container
+                  - expense.expense_items.each_with_index do |item, idx|
+                    = render 'item_card', f: f, item: item, users: users, index: idx
+
+            / Form Actions
+            .d-flex.gap-2.justify-content-end
+              = link_to 'Cancel', root_path, class: 'btn btn-outline-secondary'
+              = f.submit (submit_label || 'Save'), class: 'btn btn-primary'
+
+/ Hidden template for new items
+script#item-template type="text/template"
+  = render 'item_card', f: nil, item: ExpenseItem.new(type: 'Item'), users: users, index: '__INDEX__'

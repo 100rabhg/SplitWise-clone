@@ -1,0 +1,17 @@
+.dashboard-wrapper
+  aside.side-bar-area
+    = render 'shared/sidebar'
+  .main-area
+    .top-bar
+      h1.top-bar-title Dashboard
+      .top-bar-actions
+        = link_to 'Add Expense', new_expense_path, class: 'btn btn-primary me-2'
+        = link_to 'Add Friend', new_friendship_path, class: 'btn btn-outline-primary'
+
+    .dashboard-balances
+      #balances-bar.balances-bar
+        .card.w-100
+          .card-body.d-flex.justify-content-around
+            = render 'dashboard/balances', balance: @balance
+      #friends-balances.dashboard-detail
+        = render 'dashboard/friends_lists', owed_to_you: @owed_to_you, you_owe: @you_owe, current_user: current_user

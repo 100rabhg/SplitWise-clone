@@ -30,4 +30,12 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  number:
+    currency:
+      format:
+        unit: "₹"
+        precision: 2
+        delimiter: ","
+        separator: "."
+        format: "%u%n"
+

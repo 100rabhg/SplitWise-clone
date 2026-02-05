@@ -6,7 +6,7 @@
 import Rails from "@rails/ujs"
 import Turbolinks from "turbolinks"
 import * as ActiveStorage from "@rails/activestorage"
-import "channels"
+import "../channels"
 
 import jQuery from 'jquery';
 window.$ = jQuery
@@ -14,6 +14,7 @@ window.jQuery = jQuery
 
 import 'bootstrap/dist/js/bootstrap'
 require("jgrowl")
+import '../expense_form'
 Rails.start()
 Turbolinks.start()
 ActiveStorage.start()

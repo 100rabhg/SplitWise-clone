@@ -1,0 +1,56 @@
+.container.mt-4.mb-5
+  .row.justify-content-center
+    .col-lg-10
+      .card.shadow-sm
+        .card-header.bg-white.border-bottom.d-flex.justify-content-between.align-items-center
+          div
+            h2.mb-0.h4 Expense Details
+            p.text-muted.small.mb-0= @expense.created_at.strftime('%B %d, %Y at %I:%M %p')
+          span.badge.bg-primary.fs-5= number_to_currency(@expense.amount)
+        .card-body.p-4
+          / Expense Header
+          .mb-4
+            h3.mb-2= @expense.notes.presence || "Expense"
+            .d-flex.align-items-center.gap-2.text-muted
+              i.bi.bi-person-circle
+              span= "Paid by #{@expense.paid_by.name}"
+
+          hr
+
+          / Items Breakdown
+          h5.mb-3
+            i.bi.bi-list-ul.me-2
+            | Items & Splits
+          - if @expense.expense_items.any?
+            .list-group.list-group-flush
+              - @expense.expense_items.each do |item|
+                .list-group-item.px-0
+                  .d-flex.justify-content-between.align-items-center.mb-2
+                    .d-flex.align-items-center.gap-2
+                      - if item.type == 'Tax'
+                        i.bi.bi-calculator.text-primary
+                      - elsif item.type == 'Tip'
+                        i.bi.bi-cash-coin.text-success
+                      - else
+                        i.bi.bi-tag.text-secondary
+                      h6.mb-0= item.name.presence || item.type
+                    span.badge.bg-light.text-dark= number_to_currency(item.amount)
+                  
+                  - if item.item_splits.any?
+                    .ms-4
+                      - item.item_splits.each do |split|
+                        .d-flex.justify-content-between.align-items-center.py-1.small
+                          .d-flex.align-items-center.gap-2
+                            i.bi.bi-person.text-muted
+                            span= split.user.name
+                          span.fw-medium= number_to_currency(split.amount)
+          - else
+            .text-center.py-4
+              i.bi.bi-inbox.text-muted style="font-size: 48px;"
+              p.text-muted.mt-2 No items found
+
+          / Actions
+          .d-flex.gap-2.justify-content-end.mt-4
+            = link_to 'Back', :back, class: 'btn btn-outline-secondary'
+            - if @expense.paid_by_id == current_user.id
+              = link_to 'Edit Expense', edit_expense_path(@expense), class: 'btn btn-primary'

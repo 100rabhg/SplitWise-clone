@@ -1,0 +1,7 @@
+var container = document.getElementById('expense-form-page-container');
+if (container) {
+  container.outerHTML = '<%= j render "expenses/form", expense: @expense, url: expense_path(@expense), submit_label: "Update Expense" %>';
+} else {
+  console.error("Expense form container not found for replacement.");
+}
+document.dispatchEvent(new Event('turbolinks:load'));

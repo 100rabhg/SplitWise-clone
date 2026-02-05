@@ -1,0 +1,11 @@
+.balance-block
+  p.text-uppercase.text-muted.small.mb-1 total balance
+  - net = balance&.net_balance.to_f
+  - color_class = net > 0 ? 'text-success' : (net < 0 ? 'text-danger' : 'text-secondary')
+  p.fw-bold.mb-0 class=color_class = number_to_currency(net.abs)
+.balance-block
+  p.text-uppercase.text-muted.small.mb-1 you owe
+  p.text-danger.fw-bold.mb-0= number_to_currency(balance&.total_owed.to_f)
+.balance-block
+  p.text-uppercase.text-muted.small.mb-1 you are owed
+  p.text-success.fw-bold.mb-0= number_to_currency(balance&.total_due.to_f)

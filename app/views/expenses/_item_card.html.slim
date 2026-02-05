@@ -1,0 +1,113 @@
+.card.mb-3.item-card.shadow-sm data-index=index
+  .card-body.bg-light
+    - if f
+      = f.fields_for(:expense_items, item) do |itf|
+        = itf.hidden_field :type, value: (item.type.presence || 'Item')
+        .row.mb-3
+          - if (item.type.presence || 'Item') == 'Item'
+            .col-md-6.mb-2
+              = itf.label :name, 'Item Name', class: 'form-label fw-medium'
+              .input-group
+                span.input-group-text
+                  i.bi.bi-tag
+                = itf.text_field :name, class: 'form-control', placeholder: 'Dish, Ticket, etc.', required: true
+            .col-md-6.mb-2
+              = itf.label :amount, 'Amount', class: 'form-label fw-medium'
+              .input-group
+                span.input-group-text ₹
+                = itf.number_field :amount, step: '0.01', class: 'form-control item-amount', placeholder: '0.00', required: true
+          - else
+            .col-md-12.mb-2
+              .d-flex.align-items-center.gap-2.mb-2
+                - if (item.type.presence || 'Item') == 'Tax'
+                  i.bi.bi-calculator.text-primary style="font-size: 20px;"
+                  h6.mb-0.text-primary= item.type.presence || 'Tax'
+                - else
+                  i.bi.bi-cash-coin.text-success style="font-size: 20px;"
+                  h6.mb-0.text-success= item.type.presence || 'Tip'
+              = itf.label :amount, 'Amount', class: 'form-label fw-medium'
+              .input-group
+                span.input-group-text ₹
+                = itf.number_field :amount, step: '0.01', class: 'form-control item-amount', placeholder: '0.00', required: true
+        
+        .d-flex.justify-content-between.align-items-center.mb-3
+          h6.mb-0.text-secondary
+            i.bi.bi-people-fill.me-1
+            | Splits
+          .btn-group.btn-group-sm
+            button.btn.btn-outline-primary.equal-split type="button"
+              i.bi.bi-calculator.me-1
+              | Equal Split
+            button.btn.btn-outline-danger.remove-item type="button"
+              i.bi.bi-trash.me-1
+              | Remove
+        
+        .splits
+          - item.item_splits.each_with_index do |split, sidx|
+            = itf.fields_for :item_splits, split do |sf|
+              .row.align-items-end.mb-2.split-row
+                = sf.hidden_field :id
+                = sf.hidden_field :_destroy, class: 'destroy-flag'
+                .col-md-7
+                  = sf.label :user_id, 'Participant', class: 'form-label small'
+                  = sf.collection_select :user_id, users, :id, :name, { include_blank: '-- Select user --' }, class: 'form-select form-select-sm split-user', required: true
+                .col-md-5
+                  = sf.label :amount, 'Share', class: 'form-label small'
+                  .input-group.input-group-sm
+                    span.input-group-text ₹
+                    = sf.number_field :amount, step: '0.01', class: 'form-control split-amount', placeholder: '0.00', required: true
+                    button.btn.btn-outline-danger.remove-split type="button" title="Remove Split"
+                      i.bi.bi-trash
+
+        .mt-2
+          button.btn.btn-sm.btn-outline-secondary.add-split type="button"
+            i.bi.bi-plus-circle.me-1
+            | Add Split
+    - else
+      / Template for JavaScript (no form object)
+      input type="hidden" name="expense_transaction[expense_items_attributes][__INDEX__][type]" value=(item.type.presence || 'Item')
+      .row.mb-3
+        - if (item.type.presence || 'Item') == 'Item'
+          .col-md-6.mb-2
+            label.form-label.fw-medium Item Name
+            .input-group
+              span.input-group-text
+                i.bi.bi-tag
+              input.form-control type="text" name="expense_transaction[expense_items_attributes][__INDEX__][name]" placeholder="Dish, Ticket, etc." required="true"
+          .col-md-6.mb-2
+            label.form-label.fw-medium Amount
+            .input-group
+              span.input-group-text ₹
+              input.form-control.item-amount type="number" step="0.01" name="expense_transaction[expense_items_attributes][__INDEX__][amount]" placeholder="0.00" required="true"
+        - else
+          .col-md-12.mb-2
+            .d-flex.align-items-center.gap-2.mb-2
+              - if (item.type.presence || 'Item') == 'Tax'
+                i.bi.bi-calculator.text-primary style="font-size: 20px;"
+                h6.mb-0.text-primary Tax
+              - else
+                i.bi.bi-cash-coin.text-success style="font-size: 20px;"
+                h6.mb-0.text-success Tip
+            label.form-label.fw-medium Amount
+            .input-group
+              span.input-group-text ₹
+              input.form-control.item-amount type="number" step="0.01" name="expense_transaction[expense_items_attributes][__INDEX__][amount]" placeholder="0.00" required="true"
+      
+      .d-flex.justify-content-between.align-items-center.mb-3
+        h6.mb-0.text-secondary
+          i.bi.bi-people-fill.me-1
+          | Splits
+        .btn-group.btn-group-sm
+          button.btn.btn-outline-primary.equal-split type="button"
+            i.bi.bi-calculator.me-1
+            | Equal Split
+          button.btn.btn-outline-danger.remove-item type="button"
+            i.bi.bi-trash.me-1
+            | Remove
+      
+      .splits
+        / Empty by default, populated by JS
+      .mt-2
+        button.btn.btn-sm.btn-outline-secondary.add-split type="button"
+          i.bi.bi-plus-circle.me-1
+          | Add Split

@@ -1,0 +1,4 @@
+- if transactions.any?
+  .list-group
+    - transactions.each do |tx|
+      = render 'shared/transaction_row', tx: tx, current_user: current_user, show_actions: true, friend: friend

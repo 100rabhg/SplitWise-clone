@@ -1,0 +1,29 @@
+.container.mt-4.mb-5
+  .row.justify-content-center
+    .col-md-6
+      .card.shadow-sm
+        .card-header.bg-white.border-bottom
+          h2.mb-0.h4 Add Friend
+          p.text-muted.small.mb-0 Connect with friends to split expenses
+        .card-body.p-4
+          - if flash[:alert]
+            .alert.alert-danger.alert-dismissible.fade.show role="alert"
+              = flash[:alert]
+              button.btn-close type="button" data-bs-dismiss="alert" aria-label="Close"
+          - if flash[:notice]
+            .alert.alert-success.alert-dismissible.fade.show role="alert"
+              = flash[:notice]
+              button.btn-close type="button" data-bs-dismiss="alert" aria-label="Close"
+          
+          = form_with url: friendships_path, method: :post, local: true, class: 'needs-validation' do |f|
+            .mb-4
+              = f.label :email, "Friend's Email Address", class: 'form-label fw-medium'
+              .input-group
+                span.input-group-text
+                  i.bi.bi-envelope
+                = f.email_field :email, class: 'form-control', placeholder: 'friend@example.com', required: true, autofocus: true
+              .form-text Enter the email address of the person you want to add as a friend
+            
+            .d-flex.gap-2.justify-content-end
+              = link_to 'Cancel', root_path, class: 'btn btn-outline-secondary'
+              = f.submit 'Add Friend', class: 'btn btn-primary'

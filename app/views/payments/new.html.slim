@@ -1,0 +1,47 @@
+.container.mt-4.mb-5
+  .row.justify-content-center
+    .card.shadow-sm
+      .card-header.bg-white.border-bottom
+        h2.mb-0.h4 Settle Up
+        p.text-muted.small.mb-0 Record a payment to settle balances
+      .card-body.p-4
+        = form_with model: @payment, url: payments_path, local: true, class: 'needs-validation' do |f|
+          .row
+            .col-md-6.mb-4
+              = label_tag :friend_id, 'Friend', class: 'form-label fw-medium'
+              - if @friend
+                .input-group
+                  span.input-group-text
+                    i.bi.bi-person-circle
+                  = text_field_tag :friend_name_readonly, @friend.name, readonly: true, class: 'form-control ps-3'
+                  = hidden_field_tag 'payment_transaction[friend_id]', @friend.id
+              - else
+                .input-group
+                  span.input-group-text
+                    i.bi.bi-person-circle
+                  = select_tag 'payment_transaction[friend_id]', options_from_collection_for_select(@friends, :id, :name), include_blank: '-- Select friend --', class: 'form-select'
+
+            .col-md-6.mb-4
+              = f.label :paid_by_id, 'Who Paid?', class: 'form-label fw-medium'
+              .input-group
+                span.input-group-text
+                  i.bi.bi-wallet2
+                = f.select :paid_by_id, options_for_select(@payer_options, f.object.paid_by_id), {}, class: 'form-select'
+
+          .row
+            .col-md-6.mb-4
+              = f.label :amount, 'Amount', class: 'form-label fw-medium'
+              .input-group
+                span.input-group-text ₹
+                = f.number_field :amount, step: '0.01', class: 'form-control', placeholder: '0.00', required: true
+
+            .col-md-6.mb-4
+              = f.label :notes, 'Notes (optional)', class: 'form-label fw-medium'
+              .input-group
+                span.input-group-text
+                  i.bi.bi-chat-left-text
+                = f.text_field :notes, class: 'form-control', placeholder: 'Add a note...'
+
+          .d-flex.gap-2.justify-content-end.mt-3
+            = link_to 'Cancel', root_path, class: 'btn btn-outline-secondary'
+            = f.submit 'Record Payment', class: 'btn btn-success'

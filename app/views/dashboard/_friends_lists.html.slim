@@ -1,0 +1,35 @@
+.detail-block
+  h2.detail-title YOU OWE
+  - if you_owe.empty?
+    p.text-muted.small You do not owe anything
+  - else
+    .list-group.list-group-flush
+      - you_owe.each do |fb|
+        - other = (fb.friendship.user_1_id == current_user.id) ? fb.friendship.user2 : fb.friendship.user1
+        .list-group-item.d-flex.align-items-center.justify-content-between.py-3
+          .d-flex.align-items-center.gap-2
+            i.bi.bi-person-circle.text-secondary style="font-size: 24px;"
+            span.fw-medium= other.name
+          .d-flex.align-items-center.gap-3
+            - if fb.balance.to_f > 0
+              span.text-danger.fw-bold= number_to_currency(fb.balance)
+            - else
+              span.badge.bg-secondary Settled
+
+.detail-block
+  h2.detail-title YOU ARE OWED
+  - if owed_to_you.empty?
+    p.text-muted.small You are not owed anything
+  - else
+    .list-group.list-group-flush
+      - owed_to_you.each do |fb|
+        - other = (fb.friendship.user_1_id == current_user.id) ? fb.friendship.user2 : fb.friendship.user1
+        .list-group-item.d-flex.align-items-center.justify-content-between.py-3
+          .d-flex.align-items-center.gap-2
+            i.bi.bi-person-circle.text-secondary style="font-size: 24px;"
+            span.fw-medium= other.name
+          .d-flex.align-items-center.gap-3
+            - if fb.balance.to_f > 0
+              span.text-success.fw-bold= number_to_currency(fb.balance)
+            - else
+              span.badge.bg-secondary Settled

@@ -1,0 +1,8 @@
+- if object.errors.any?
+  .alert.alert-danger.mb-4#error_explanation
+    h6.alert-heading
+      i.bi.bi-exclamation-triangle-fill.me-2
+      = "#{pluralize(object.errors.count, "error")} prohibited this from being saved:"
+    ul.mb-0.mt-2
+      - object.errors.full_messages.each do |message|
+        li = message

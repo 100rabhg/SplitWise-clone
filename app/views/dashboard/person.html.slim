@@ -1,0 +1,15 @@
+.dashboard-wrapper
+  aside.side-bar-area
+    = render 'shared/sidebar'
+  .main-area
+    .top-bar
+      h1.top-bar-title= @friend.name
+      .top-bar-actions
+        - if @friendship_balance && @friendship_balance.balance > 0
+          = link_to 'Settle up', new_payment_path(friend_id: @friend.id), class: 'btn btn-outline-success me-2'
+        = link_to 'Remove Friend', friendship_path(@friendship.id), method: :delete, data: { confirm: 'Are you sure you want to remove this friend?' }, class: 'btn btn-outline-danger'
+    - if @friendship_balance
+      .p-3
+        = render 'dashboard/friend_summary', friendship_balance: @friendship_balance, current_user: current_user
+    #friend-expenses.expenses-list data-friendship-id="#{@friendship.id}"
+      = render 'dashboard/friend_expenses', transactions: @transactions, friendship: @friendship, friend: @friend, current_user: current_user

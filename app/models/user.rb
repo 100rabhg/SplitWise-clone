@@ -18,7 +18,7 @@ class User < ApplicationRecord
   has_many :friendships, class_name: 'FlatFriendship', foreign_key: :user_id
 
   has_many :payment_transactions, -> { where(deleted_at: nil) }, through: :friendships
-  has_many :friendship_balances, -> { where(deleted_at: nil) }, through: :friendships
+  has_many :friendship_balances, -> { where(deleted_at: nil) }, through: :friendships, source: :friendship_balance
   has_many :item_splits, -> { where(deleted_at: nil) }, through: :friendships
   has_many :friends, through: :friendships, source: :friend
 
@@ -27,6 +27,17 @@ class User < ApplicationRecord
   # Get or create user balance
   def ensure_balance
     user_balance || create_user_balance
+  end
+
+  def friends_with_self
+    [self] + friends.to_a
+  end
+
+  def activity_transactions
+    expenses = ExpenseTransaction.involving(self).select(:id)
+    payments = payment_transactions.select(:id)
+
+    Transaction.where(id: expenses).or(Transaction.where(id: payments)).order(created_at: :desc)
   end
 
   private

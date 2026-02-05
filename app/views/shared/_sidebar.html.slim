@@ -1,0 +1,9 @@
+.friends-list
+  p.friends-list-header FRIENDS
+  - @friendships.each do |f|
+    - active_class = (defined?(@friend) && @friend&.id == f.friend_id) ? 'active' : ''
+    = link_to "/people/#{f.friend_id}", class: ["friend-name", active_class].join(' ') do
+      .friend-name-content
+        i.user-icon.bi.bi-person-circle
+        = f.friend.name
+      = friend_net_badge(current_user, f.friendship_balance)
