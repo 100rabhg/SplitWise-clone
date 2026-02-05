@@ -15,7 +15,7 @@ class FriendshipsController < ApplicationController
   end
 
   def destroy
-    friendship = Friendship.find(params[:id])
+    friendship = Friendship.user_friendships(current_user.id).find(params[:id])
 
     if friendship
       destroy_friendship_with_cleanup(friendship)

@@ -21,6 +21,8 @@ class Friendship < ApplicationRecord
     [user1, user2]
   end
 
+  scope :user_friendships, ->(user_id) { where(user_1_id: user_id).or(where(user_2_id: user_id)) }
+
   private
 
   def users_are_different

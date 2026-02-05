@@ -12,10 +12,16 @@ class ItemSplit < ApplicationRecord
   validates :friendship_id, presence: true, if: -> { expense_item.expense_transaction.paid_by_id != user_id }
 
   def add_friendship
-    return if expense_item.expense_transaction.paid_by_id == user_id
+    return if friendship_id.present? || expense_item.expense_transaction.paid_by_id == user_id
 
-    self.friendship_id = FlatFriendship.find_by(
-      user_id: expense_item.expense_transaction.paid_by_id, friend_id: user_id
-    )&.id
+    friendship = FlatFriendship.find_by(
+      user_id: expense_item.expense_transaction.paid_by_id,
+      friend_id: user_id
+    )
+    if friendship
+      self.friendship_id = friendship.id
+    else
+      errors.add(:friendship, 'must exist between the payer and the user')
+    end
   end
 end

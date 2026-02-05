@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   get 'people/:id', to: 'dashboard#person'
   get 'activity', to: 'dashboard#activity'
 
-  resources :expenses, expect: :index
-  resources :payments, expect: :index
+  resources :expenses, except: :index
+  resources :payments, except: :index
   resources :friendships, only: [:new, :create, :destroy]
 end

@@ -46,9 +46,10 @@ class RecalculateFriendshipBalanceJob < ApplicationJob
   end
 
   def upsert_balance
-    balance = FriendshipBalance.find_or_initialize_by(friendship: friendship)
-    net = net_balance
-
-    balance.update!(balance: net.abs, owes_to: net.positive? ? user : friend)
+    FriendshipBalance.transaction do
+      balance = FriendshipBalance.lock.find_or_create_by!(friendship: friendship)
+      net = net_balance
+      balance.update!(balance: net.abs, owes_to: net.positive? ? user : friend)
+    end
   end
 end
